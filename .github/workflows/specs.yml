@@ -1,0 +1,78 @@
+name: Specs
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  linting:
+    name: All
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      PORT: 7778
+      DB_USER: postgres
+      DB_PORT: 5432
+      DB_NAME: wellos_central_test
+      DB_PASSWORD: wellos_central_test
+      DB_HOST: localhost
+      TZ: UTC
+
+    defaults:
+      run:
+        working-directory: ./
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: wellos_central_test
+          POSTGRES_DB: wellos_central_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+          registry-url: https://npm.pkg.github.com/
+
+      - run: echo "@rvohealth:registry=https://npm.pkg.github.com" > ./.npmrc
+      - run: echo -e "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ./.npmrc
+
+      # Yarn isnt preinstalled on this image for some reason
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Install node-gyp
+        run: yarn global add node-gyp
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: api/node_modules
+          key: ${{ runner.os }}-cache-node-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        if: ${{ steps.cache-node_modules.outputs.cache-hit != 'true' }}
+        run: yarn install --frozen-lockfile
+        env:
+          GITHUB_OAUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: run migrations
+        run: GITHUB_OAUTH_TOKEN=${{ secrets.GITHUB_TOKEN }} APP_ROOT_PATH=$(pwd) yarn dream db:migrate --skip-sync
+
+      - name: run specs
+        run: GITHUB_OAUTH_TOKEN=${{ secrets.GITHUB_TOKEN }} APP_ROOT_PATH=$(pwd) yarn spec
