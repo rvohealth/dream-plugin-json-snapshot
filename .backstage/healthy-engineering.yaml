@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: dream-plugin-json-snapshot
+  description: A plugin to take snapshots of a record, traversing all sub-associations, and spitting the resulting data out as JSON
+spec:
+  type: service # can be one of: service, library, website, iac-pipeline
+  lifecycle: production # can be one of: experimental, production, deprecated
+  owner: unassigned # your existing tech team in Backstage, i.e. team-developer-platforms
