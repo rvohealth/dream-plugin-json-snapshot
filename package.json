@@ -1,12 +1,11 @@
 {
   "name": "@rvohealth/dream-plugin-json-snapshot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A plugin for extracting model attributes and associations into JSON",
   "main": "src/index.ts",
   "repository": "https://github.com/rvohealth/dream-plugin-json-snapshot.git",
   "author": "rvohealth",
   "license": "MIT",
-  "private": false,
   "scripts": {
     "dream": "yarn dreamts",
     "dreamts": "rm -rf node_modules/@rvohealth/dream/test-app && APP_ROOT_PATH=$(pwd) yarn --cwd=node_modules/@rvohealth/dream dreamts",
@@ -17,20 +16,23 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
-  "dependencies": {
-    "@rvohealth/dream": "^0.6.1",
-    "dotenv": "^16.4.5"
-  },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
+    "@eslint/js": "=9.0.0",
+    "@rvohealth/dream": "^0.10.16",
     "@types/jest": "^29.5.12",
-    "eslint": "^9.0.0",
+    "@types/node": "^22.5.1",
+    "dotenv": "^16.4.5",
+    "eslint": "=9.0.0",
     "jest": "^29.7.0",
     "jest-plugin-context": "^2.9.0",
     "prettier": "^3.3.3",
-    "ts-jest": "^29.1.4",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "typescript-eslint": "^7.6.0"
+    "typescript": "^5.5.4",
+    "typescript-eslint": "=7.18.0"
+  },
+  "packageManager": "yarn@4.4.1",
+  "peerDependencies": {
+    "@rvohealth/dream": "*"
   }
 }
