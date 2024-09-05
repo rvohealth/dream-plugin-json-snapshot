@@ -2,11 +2,19 @@
   "name": "@rvohealth/dream-plugin-json-snapshot",
   "version": "1.0.1",
   "description": "A plugin for extracting model attributes and associations into JSON",
-  "main": "src/index.ts",
+  "main": "dist/src/index.js",
   "repository": "https://github.com/rvohealth/dream-plugin-json-snapshot.git",
   "author": "rvohealth",
   "license": "MIT",
+  "files": [
+    "tsconfig.json",
+    "src/**/*",
+    "dist/**/*"
+  ],
   "scripts": {
+    "publish": "yarn npm publish",
+    "build": "echo \"building dream-spec-helpers...\" && rm -rf dist && npx tsc -p ./tsconfig.json",
+    "prepack": "yarn build",
     "dream": "yarn dreamts",
     "dreamts": "rm -rf node_modules/@rvohealth/dream/test-app && APP_ROOT_PATH=$(pwd) yarn --cwd=node_modules/@rvohealth/dream dreamts",
     "spec": "APP_ROOT_PATH=$(pwd) NODE_ENV=test jest --runInBand --forceExit --config=./spec/jest.config.js",
