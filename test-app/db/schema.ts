@@ -10,6 +10,7 @@ export const schema = {
     createdAtField: 'createdAt',
     updatedAtField: 'updatedAt',
     deletedAtField: 'deletedAt',
+    serializerKeys: [],
     scopes: {
       default: [],
       named: [],
@@ -95,6 +96,7 @@ export const schema = {
     createdAtField: 'createdAt',
     updatedAtField: 'updatedAt',
     deletedAtField: 'deletedAt',
+    serializerKeys: [],
     scopes: {
       default: [],
       named: [],
@@ -201,6 +203,7 @@ export const schema = {
     createdAtField: 'createdAt',
     updatedAtField: 'updatedAt',
     deletedAtField: 'deletedAt',
+    serializerKeys: [],
     scopes: {
       default: [],
       named: [],
@@ -278,4 +281,19 @@ export const schema = {
 export const globalSchema = {
   passthroughColumns: [],
   allDefaultScopeNames: [],
+  globalNames: {
+    models: {
+      'Comment': 'comments',
+      'Post': 'posts',
+      'User': 'users'
+    },
+    serializers: [
+      'CommentSerializer',
+      'CommentSummarySerializer',
+      'PostSerializer',
+      'PostSummarySerializer',
+      'UserSerializer',
+      'UserSummarySerializer'
+    ],
+  },
 } as const

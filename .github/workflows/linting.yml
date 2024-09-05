@@ -6,47 +6,40 @@ on:
 
 jobs:
   linting:
-    name: All
-    timeout-minutes: 15
+    name: Linting
     runs-on: ubuntu-latest
     env:
-      PUPPETEER_SKIP_DOWNLOAD: 'true'
-    defaults:
-      run:
-        working-directory: ./
+      NODE_ENV: test
+      YARN_CACHE_FOLDER: ~/.yarn-cache
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          fetch-depth: 2
+          node-version: '20'
 
-      - name: Setup Node.js Environment
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: .node-version
-          registry-url: https://npm.pkg.github.com/
+      - run: npm install -g corepack
+      - run: corepack enable
 
-      - run: echo "@rvohealth:registry=https://npm.pkg.github.com" > ./.npmrc
-      - run: echo -e "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ./.npmrc
-
-      # Yarn isnt preinstalled on this image for some reason
-      - name: Install Yarn
-        run: npm install -g yarn
-
-      - name: Install node-gyp
-        run: yarn global add node-gyp
+      - run: "echo \"nodeLinker: node-modules\" > ./.yarnrc.yml"
+      - run: "echo -e \"npmScopes:\" >> ./.yarnrc.yml"
+      - run: "echo -e \"  rvohealth:\" >> ./.yarnrc.yml"
+      - run: "echo -e \"    npmAuthToken: '${{ secrets.GITHUB_TOKEN }}'\" >> ./.yarnrc.yml"
+      - run: "echo -e \"    npmRegistryServer: 'https://npm.pkg.github.com'\" >> ./.yarnrc.yml"
 
       - name: Cache node_modules
-        uses: actions/cache@v3
+        id: cache-node-modules
+        uses: actions/cache@v4
         with:
-          path: api/node_modules
+          path: ~/.yarn-cache
           key: ${{ runner.os }}-cache-node-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install dependencies
-        if: ${{ steps.cache-node_modules.outputs.cache-hit != 'true' }}
-        run: yarn install --frozen-lockfile
-        env:
-          GITHUB_OAUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - if: ${{ steps.cache-node-modules.outputs.cache-hit != 'true' }}
+        name: List the state of node modules
+        continue-on-error: true
+        run: yarn list
 
-      - name: Lint ES-Lint and Prettier
-        run: GITHUB_OAUTH_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn lint
+      - run: yarn install --immutable
+      - run: yarn lint
+
+
+

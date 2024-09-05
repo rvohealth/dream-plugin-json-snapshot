@@ -1,10 +1,15 @@
-import { Dream, Dreamconf } from '@rvohealth/dream'
-import { DBClass } from '../../db/sync'
+import { Dream } from '@rvohealth/dream'
 import { globalSchema, schema } from '../../db/schema'
-import dreamconf from '../conf/dreamconf'
+import { DBClass } from '../../db/sync'
 
 export default class ApplicationModel extends Dream {
-  public get dreamconf(): Dreamconf<DBClass, typeof schema, typeof globalSchema> {
-    return dreamconf
+  public DB: DBClass
+
+  public get schema() {
+    return schema
+  }
+
+  public get globalSchema() {
+    return globalSchema
   }
 }

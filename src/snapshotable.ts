@@ -40,15 +40,19 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
         ...allowedAttributes,
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
       const associationMap = dreamClass['associationMetadataMap']()
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       for (const associationName of Object.keys(associationMap)) {
         if (hideFromSnapshotableFields.includes(associationName)) continue
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
         const associationMetadata = associationMap[associationName]
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const hasManyRecords: Record<string, any>[] = []
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         switch (associationMetadata.type) {
           case 'HasMany':
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

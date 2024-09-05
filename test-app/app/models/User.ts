@@ -1,23 +1,12 @@
-import { DreamColumn, HasMany, HasOne } from '@rvohealth/dream'
-import UserSerializer, { UserSummarySerializer } from '../../app/serializers/UserSerializer'
+import { DreamColumn } from '@rvohealth/dream'
+import HideFromSnapshotable from '../../../src/hide-from-snapshots'
+import Snapshotable from '../../../src/snapshotable'
 import ApplicationModel from './ApplicationModel'
 import Post from './Post'
-import Snapshotable from '../../../src/snapshotable'
-import HideFromSnapshotable from '../../../src/hide-from-snapshots'
 
 export default class User extends Snapshotable(ApplicationModel) {
   public get table() {
     return 'users' as const
-  }
-
-  public get serializers() {
-    return {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      default: UserSerializer<any, any>,
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      summary: UserSummarySerializer<any, any>,
-    } as const
   }
 
   public id: DreamColumn<User, 'id'>
@@ -29,9 +18,9 @@ export default class User extends Snapshotable(ApplicationModel) {
   @HideFromSnapshotable()
   public loginCount: DreamColumn<User, 'loginCount'>
 
-  @HasMany(() => Post)
+  @User.HasMany('Post')
   public posts: Post[]
 
-  @HasOne(() => Post, { order: { id: 'desc' } })
+  @User.HasOne('Post', { order: { id: 'desc' } })
   public mostRecentPost: Post | null
 }

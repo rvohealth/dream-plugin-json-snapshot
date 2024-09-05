@@ -1,3 +1,3 @@
-import '../../test-app/helpers/loadEnv'
+import '../../test-app/conf/loadEnv'
 
 export default async () => {}
