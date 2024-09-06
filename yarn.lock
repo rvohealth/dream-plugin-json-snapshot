@@ -876,7 +876,7 @@ __metadata:
   resolution: "@rvohealth/dream-plugin-json-snapshot@workspace:."
   dependencies:
     "@eslint/js": "npm:=9.0.0"
-    "@rvohealth/dream": "npm:^0.10.16"
+    "@rvohealth/dream": "npm:^0.10.18"
     "@rvohealth/dream-spec-helpers": "npm:^0.0.8"
     "@types/jest": "npm:^29.5.12"
     "@types/luxon": "npm:^3.4.2"
@@ -918,9 +918,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rvohealth/dream@npm:^0.10.16":
-  version: 0.10.16
-  resolution: "@rvohealth/dream@npm:0.10.16::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40rvohealth%2Fdream%2F0.10.16%2Fad6dcbe00a76840dadfc629f4cdb13a7dd1550c4"
+"@rvohealth/dream@npm:^0.10.18":
+  version: 0.10.18
+  resolution: "@rvohealth/dream@npm:0.10.18::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40rvohealth%2Fdream%2F0.10.18%2F85fb774e3ee7a51fcea40b88d95acb34b3a3226d"
   dependencies:
     "@types/lodash.clonedeep": "npm:^4.5.9"
     "@types/lodash.clonedeepwith": "npm:^4.5.9"
@@ -947,7 +947,7 @@ __metadata:
     kysely-codegen: ~0.16.3
     luxon: ^3.5.0
     pg: "*"
-  checksum: 10c0/ae4424ae783c294d5899dbcdc92c4a3818cb0f645ea680060695c6bdf714fccaafd04cb101fc1d7ddd1c0e5b171b0efb6c9cf5e9a19d63256d052b85995170b7
+  checksum: 10c0/05ec617f7bb4c9c80a32ff0da6298145c51fa74c39ddc562c042d0522f9fad99fc36a1b280238dad2c017da9241e91ba0c62c977d1cf054a7892b36e2ac94010
   languageName: node
   linkType: hard
 
