@@ -3,8 +3,7 @@ import { Dream } from '@rvohealth/dream'
 type SnapshotableConstructor = new (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...args: any[]
-  // eslint-disable-next-line @typescript-eslint/ban-types
-) => {}
+) => object
 
 export default function Snapshotable<T extends SnapshotableConstructor>(Base: T) {
   return class Snapshotable extends Base {
