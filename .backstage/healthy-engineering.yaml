@@ -4,6 +4,6 @@ metadata:
   name: dream-plugin-json-snapshot
   description: A plugin to take snapshots of a record, traversing all sub-associations, and spitting the resulting data out as JSON
 spec:
-  type: service # can be one of: service, library, website, event-driven-service, terraform-module, terraform-repo
+  type: library # can be one of: service, library, website, event-driven-service, terraform-module, terraform-repo
   lifecycle: production # can be one of: experimental, production, deprecated
   owner: team-wellos # your existing tech team, i.e. team-developer-platforms
