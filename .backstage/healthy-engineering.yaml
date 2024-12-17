@@ -6,4 +6,4 @@ metadata:
 spec:
   type: library # can be one of: service, library, website, event-driven-service, terraform-module, terraform-repo
   lifecycle: production # can be one of: experimental, production, deprecated
-  owner: team-wellos # your existing tech team, i.e. team-developer-platforms
+  owner: team-wellos-be # your existing tech team, i.e. team-developer-platforms
