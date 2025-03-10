@@ -5,7 +5,7 @@ A plugin to take snapshots of a record, traversing all sub-associations, and spi
 ## Usage
 
 ```ts
-import { Sortable } from '@rvohealth/dream-plugin-json-snapshot'
+import { Sortable } from '@rvoh/dream-plugin-json-snapshot'
 
 class User extends Sortable(ApplicationModel) {
   ...

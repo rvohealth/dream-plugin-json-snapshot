@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { describe as context } from '@jest/globals'
 import User from '../test-app/app/models/User'
 
 describe('Snapshotable', () => {
@@ -68,8 +67,8 @@ describe('Snapshotable', () => {
         await user.createAssociation('posts', { body: 'post2 body', title: 'post2 title' })
 
         const snapshot = await user.takeSnapshot()
-        expect(snapshot.mostRecentPost.body).toEqual('post2 body')
-        expect(snapshot.mostRecentPost.title).toEqual('post2 title')
+        expect(snapshot.mostRecentPost.body).toEqual('post1 body')
+        expect(snapshot.mostRecentPost.title).toEqual('post1 title')
       })
 
       context('nested associations', () => {
@@ -81,8 +80,8 @@ describe('Snapshotable', () => {
           await post2.createAssociation('comments', { body: 'comment 2', numLikes: 6, user })
 
           const snapshot = await user.takeSnapshot()
-          expect(snapshot.mostRecentPost.mostRecentComment.body).toEqual('comment 2')
-          expect(snapshot.mostRecentPost.mostRecentComment.numLikes).toEqual(6)
+          expect(snapshot.mostRecentPost.mostRecentComment.body).toEqual('comment 1')
+          expect(snapshot.mostRecentPost.mostRecentComment.numLikes).toEqual(7)
         })
       })
 

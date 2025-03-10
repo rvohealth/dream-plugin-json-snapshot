@@ -7,7 +7,7 @@
 
 import '../conf/loadEnv'
 
-import { DreamCLI } from '@rvohealth/dream'
+import { DreamCLI } from '@rvoh/dream'
 import { Command } from 'commander'
 import initializeDreamApplication from './helpers/initializeDreamApplication'
 

@@ -1,4 +1,4 @@
-import { DreamApplication } from '@rvohealth/dream'
+import { DreamApplication } from '@rvoh/dream'
 import dreamConfCb from '../../conf/dream'
 
 export default async function initializeDreamApplication() {

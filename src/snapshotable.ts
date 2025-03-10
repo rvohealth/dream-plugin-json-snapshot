@@ -1,4 +1,4 @@
-import { Dream } from '@rvohealth/dream'
+import { Dream } from '@rvoh/dream'
 
 type SnapshotableConstructor = new (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

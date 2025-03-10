@@ -1,4 +1,4 @@
-import { DreamSerializer, Attribute, DreamColumn } from '@rvohealth/dream'
+import { DreamSerializer, Attribute, DreamColumn } from '@rvoh/dream'
 import User from '../models/User'
 
 export class UserSummarySerializer<DataType extends User, Passthrough extends object> extends DreamSerializer<
