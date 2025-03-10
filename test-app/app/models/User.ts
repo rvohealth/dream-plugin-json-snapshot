@@ -1,8 +1,10 @@
-import { DreamColumn } from '@rvohealth/dream'
+import { Decorators, DreamColumn } from '@rvohealth/dream'
 import HideFromSnapshotable from '../../../src/hide-from-snapshots'
 import Snapshotable from '../../../src/snapshotable'
 import ApplicationModel from './ApplicationModel'
 import Post from './Post'
+
+const Deco = new Decorators<InstanceType<typeof User>>()
 
 export default class User extends Snapshotable(ApplicationModel) {
   public get table() {
@@ -18,9 +20,9 @@ export default class User extends Snapshotable(ApplicationModel) {
   @HideFromSnapshotable()
   public loginCount: DreamColumn<User, 'loginCount'>
 
-  @User.HasMany('Post')
+  @Deco.HasMany('Post')
   public posts: Post[]
 
-  @User.HasOne('Post', { order: { id: 'desc' } })
+  @Deco.HasOne('Post')
   public mostRecentPost: Post | null
 }

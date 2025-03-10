@@ -1,13 +1,15 @@
 import { DreamApplication } from '@rvohealth/dream'
-import path from 'path'
+import importAll from '../app/helpers/importAll'
+import importDefault from '../app/helpers/importDefault'
+import srcPath from '../app/helpers/srcPath'
 import inflections from './inflections'
 
 export default async function (dreamApp: DreamApplication) {
-  await dreamApp.load('models', path.join(__dirname, '..', 'app', 'models'))
-  await dreamApp.load('serializers', path.join(__dirname, '..', 'app', 'serializers'))
-  await dreamApp.load('services', path.join(__dirname, '..', 'app', 'services'))
+  await dreamApp.load('models', srcPath('app', 'models'), path => importDefault(path))
+  await dreamApp.load('serializers', srcPath('app', 'serializers'), path => importAll(path))
+  await dreamApp.load('services', srcPath('app', 'services'), path => importDefault(path))
 
-  dreamApp.set('projectRoot', path.join(__dirname, '..', '..'))
+  dreamApp.set('projectRoot', srcPath('..'))
   dreamApp.set('primaryKeyType', 'bigserial')
   dreamApp.set('inflections', inflections)
 
@@ -21,6 +23,7 @@ export default async function (dreamApp: DreamApplication) {
     serializers: 'test-app/app/serializers',
     services: 'test-app/app/services',
     modelSpecs: 'test-app/spec/unit/models',
+    types: 'test-app/types',
   })
 
   dreamApp.set('parallelTests', Number(process.env.DREAM_PARALLEL_TESTS))
