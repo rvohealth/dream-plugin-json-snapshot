@@ -1,5 +1,5 @@
-import { DreamApplication } from '@rvohealth/dream'
-import { provideDreamViteMatchers, truncate } from '@rvohealth/dream-spec-helpers'
+import { DreamApplication } from '@rvoh/dream'
+import { provideDreamViteMatchers, truncate } from '@rvoh/dream-spec-helpers'
 import initializeDreamApplication from '../../test-app/cli/helpers/initializeDreamApplication'
 
 provideDreamViteMatchers()

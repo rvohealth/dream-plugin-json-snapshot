@@ -1,1 +1,1 @@
-/// <reference types="@rvohealth/dream-spec-helpers" />
+/// <reference types="@rvoh/dream-spec-helpers" />

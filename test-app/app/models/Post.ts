@@ -1,4 +1,4 @@
-import { Decorators, DreamColumn } from '@rvohealth/dream'
+import { Decorators, DreamColumn } from '@rvoh/dream'
 import HideFromSnapshotable from '../../../src/hide-from-snapshots'
 import Snapshotable from '../../../src/snapshotable'
 import ApplicationModel from './ApplicationModel'

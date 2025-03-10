@@ -1,4 +1,4 @@
-import { DecoratorContext, Dream } from '@rvohealth/dream'
+import { DecoratorContext, Dream } from '@rvoh/dream'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function HideFromSnapshotable(): any {
