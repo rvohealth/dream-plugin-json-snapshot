@@ -19,7 +19,8 @@ export default function HideFromSnapshotable(): any {
          * constructed. We leverage this opportunity to delete the instance accessors
          * so that the prototype accessors applied by this decorator can be reached.
          */
-        delete (this as any)[key]
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        delete this[key]
         return
       }
 
