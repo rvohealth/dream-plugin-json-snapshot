@@ -33,6 +33,19 @@ describe('Snapshotable', () => {
         expect(snapshot.posts[1].title).toEqual('post2 title')
       })
 
+      context('through associations', () => {
+        it('are omitted since the associations they pass through will already capture that data', async () => {
+          const user = await User.create({ name: 'fred', email: 'fred@fred' })
+          const post1 = await user.createAssociation('posts')
+          const post2 = await user.createAssociation('posts')
+          await post1.createAssociation('comments', { body: 'comment 1', numLikes: 7, user })
+          await post2.createAssociation('comments', { body: 'comment 2', numLikes: 6, user })
+
+          const snapshot = await user.takeSnapshot()
+          expect(snapshot.comments).toBeUndefined()
+        })
+      })
+
       context('nested associations', () => {
         it("renders a JSON representation of a model's nested HasMany associations", async () => {
           const user = await User.create({ name: 'fred', email: 'fred@fred' })
