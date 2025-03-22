@@ -95,11 +95,10 @@ b.) All laptops are ok sleeping places for your
 
 */
 
-import { CalendarDate } from '@rvoh/dream'
-import { DateTime } from 'luxon'
+import { CalendarDate, DateTime } from '@rvoh/dream'
 import {
   IdType
-} from './db'
+} from './db.js'
 
 export const schema = {
   comments: {
@@ -178,7 +177,6 @@ export const schema = {
       },
     },
     virtualColumns: [],
-    encryptedColumns: [],
     associations: {
       post: {
         type: 'BelongsTo',
@@ -272,7 +270,6 @@ export const schema = {
       },
     },
     virtualColumns: [],
-    encryptedColumns: [],
     associations: {
       comments: {
         type: 'HasMany',
@@ -378,8 +375,21 @@ export const schema = {
       },
     },
     virtualColumns: [],
-    encryptedColumns: [],
     associations: {
+      comments: {
+        type: 'HasMany',
+        foreignKey: 'userId',
+        tables: ['comments'],
+        optional: null,
+        requiredOnClauses: null,
+      },
+      commentsFollowingThrough: {
+        type: 'HasMany',
+        foreignKey: 'userId',
+        tables: ['comments'],
+        optional: null,
+        requiredOnClauses: null,
+      },
       mostRecentPost: {
         type: 'HasOne',
         foreignKey: 'userId',
@@ -394,12 +404,26 @@ export const schema = {
         optional: null,
         requiredOnClauses: null,
       },
+      postsWithPassthroughOnClause: {
+        type: 'HasMany',
+        foreignKey: 'userId',
+        tables: ['posts'],
+        optional: null,
+        requiredOnClauses: null,
+      },
+      postsWithRequiredOnClause: {
+        type: 'HasMany',
+        foreignKey: 'userId',
+        tables: ['posts'],
+        optional: null,
+        requiredOnClauses: ['title'],
+      },
     },
   },
 } as const
 
 export const globalSchema = {
-  passthroughColumns: [],
+  passthroughColumns: ['title'],
   allDefaultScopeNames: [],
   globalNames: {
     models: {

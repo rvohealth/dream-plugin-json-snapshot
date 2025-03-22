@@ -1,5 +1,5 @@
 import { Decorators, DreamColumn } from '@rvoh/dream'
-import HideFromSnapshotable from '../../../src/hide-from-snapshots'
+import SnapshotableHide from '../../../src/SnapshotableHide'
 import Snapshotable from '../../../src/snapshotable'
 import ApplicationModel from './ApplicationModel'
 import Comment from './Comment'
@@ -26,14 +26,14 @@ export default class Post extends Snapshotable(ApplicationModel) {
   @Deco.HasMany('Comment')
   public comments: Comment[]
 
-  @HideFromSnapshotable()
+  @SnapshotableHide()
   @Deco.HasMany('Comment', { on: { body: null } })
   public nullComments: Comment[]
 
   @Deco.HasOne('Comment')
   public mostRecentComment: Comment | null
 
-  @HideFromSnapshotable()
+  @SnapshotableHide()
   @Deco.HasOne('Comment', { on: { body: null } })
   public mostRecentNullComment: Comment[]
 }

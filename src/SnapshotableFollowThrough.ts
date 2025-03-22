@@ -1,7 +1,7 @@
 import { DecoratorContext, Dream } from '@rvoh/dream'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function HideFromSnapshotable(): any {
+export default function SnapshotableFollowThrough(): any {
   // return function (target: any, key: string) {
   return function (_: undefined, context: DecoratorContext) {
     const key = context.name
@@ -24,13 +24,13 @@ export default function HideFromSnapshotable(): any {
         return
       }
 
-      if (!Object.getOwnPropertyDescriptor(dreamClass, 'hideFromSnapshotable')) {
+      if (!Object.getOwnPropertyDescriptor(dreamClass, 'snapshotableFollowThrough')) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-        ;(dreamClass as any).hideFromSnapshotable = [] as string[]
+        ;(dreamClass as any).snapshotableFollowThrough = [] as string[]
       }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-      ;(dreamClass as any).hideFromSnapshotable.push(key)
+      ;(dreamClass as any).snapshotableFollowThrough.push(key)
       return
     })
   }

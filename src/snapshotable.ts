@@ -1,10 +1,28 @@
-import { Dream } from '@rvoh/dream'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Dream, DreamConst } from '@rvoh/dream'
+import { BelongsToStatement } from '@rvoh/dream/dist/types/src/types/associations/belongsTo'
+import { HasManyStatement } from '@rvoh/dream/dist/types/src/types/associations/hasMany'
+import { HasOneStatement } from '@rvoh/dream/dist/types/src/types/associations/hasOne'
 
-type SnapshotableConstructor = new (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ...args: any[]
-) => object
+type SnapshotableConstructor = new (...args: any[]) => object
 
+type AssociationMetadataMap = Record<
+  string,
+  | BelongsToStatement<any, any, any, any>
+  | HasManyStatement<any, any, any, any>
+  | HasOneStatement<any, any, any, any>
+>
+
+/**
+ * The `@Snapshotable()` class decorator adds the instance method `takeSnapshot` to the decorated Dream model. When called, `takeSnapshot` builds a simple object of all the database fields for the model. It also traverses the association tree rooted at the model, following `HasMany` and `HasOne` associations, recursively calling `takeSnapshot` on each. This is useful for converting an entire model tree to JSON to, for example, store a user's data in compliance with HIPAA retention requirements.
+ *
+ * Snapshotable automatically skips associations with `required` or `passthrough` `on` clauses.
+ *
+ * `BelongsTo` associations are intentionally skipped, as are `through` associations, so Snapshotable automatically avoids circuits (which would lead to an infinite loop). To explicitly include a `through` association, decorate it with the `@SnapshotableFollowThrough()` decorator.
+ *
+ * NOTE: Snapshotable is not optimized to eliminate the N+1 problem, but it will leverage the read replica, if configured. Snapshotable builds a single object of the entire content tree, so the in-memory object may become quite large. As such, it may be advisable to leverage `@SnapshotableHide` to prevent full traversing the tree so that it can be split into chunks. It is recommended that Snapshotable is only used in a background job (see {@link https://psychicframework.com/docs/plugins/workers/overview}).
+ *
+ */
 export default function Snapshotable<T extends SnapshotableConstructor>(Base: T) {
   return class Snapshotable extends Base {
     public async takeSnapshot() {
@@ -12,61 +30,75 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
       return await this._takeSnapshot(dream)
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async _takeSnapshot(dream: Dream): Promise<Record<string, any>> {
       const dreamClass = dream.constructor as typeof Dream
       if (!dream.isDreamInstance) throw new Error('Cannot call takeSnapshot on a non-Dream')
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-      const hideFromSnapshotableFields = ((dreamClass as any)['hideFromSnapshotable'] || []) as string[]
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const snapshotableHideFields = ((dreamClass as any)['snapshotableHide'] || []) as string[]
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const snapshotableFollowThroughFields = ((dreamClass as any)['snapshotableFollowThrough'] ||
+        []) as string[]
       const attributes = dream.getAttributes()
 
       const allowedAttributes = Object.keys(attributes).reduce(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (agg: Record<string, any>, columnName) => {
-          if (!hideFromSnapshotableFields.includes(columnName)) {
+          if (!snapshotableHideFields.includes(columnName)) {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             agg[columnName] = attributes[columnName]
           }
           return agg
         },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         {} as Record<string, any>
       )
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data: any = {
         ...allowedAttributes,
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
-      const associationMap = dreamClass['associationMetadataMap']()
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      for (const associationName of Object.keys(associationMap)) {
-        if (hideFromSnapshotableFields.includes(associationName)) continue
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      const associationMap = dreamClass['associationMetadataMap']() as AssociationMetadataMap
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+      for (const associationName of Object.keys(associationMap)) {
+        if (snapshotableHideFields.includes(associationName)) continue
+
         const associationMetadata = associationMap[associationName]
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if ((associationMetadata as HasManyStatement<any, any, any, any>).through) {
+          const ignoredThroughAssociation = !snapshotableFollowThroughFields.includes(associationName)
+          if (ignoredThroughAssociation) continue
+        }
+
+        if ((associationMetadata as HasManyStatement<any, any, any, any>).on) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          const requiredOrPassthroughClause = Object.values(
+            (associationMetadata as HasManyStatement<any, any, any, any>).on!
+          ).find(value => value === DreamConst.required || value === DreamConst.passthrough)
+          if (requiredOrPassthroughClause) continue
+        }
+
         const hasManyRecords: Record<string, any>[] = []
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         switch (associationMetadata.type) {
           case 'HasMany':
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            await dream.associationQuery(associationName as any).findEach(async record => {
-              const associationSnapshot = await this._takeSnapshot(record as Dream)
-              hasManyRecords.push(associationSnapshot)
-            })
+            await dream
+              .associationQuery(associationName as any)
+              .connection('replica')
+              .findEach(async record => {
+                const associationSnapshot = await this._takeSnapshot(record as Dream)
+                hasManyRecords.push(associationSnapshot)
+              })
 
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             data[associationName] = hasManyRecords
             break
 
           case 'HasOne':
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-case-declarations, @typescript-eslint/no-unsafe-assignment
-            const record = await dream.associationQuery(associationName as any).first()
+            // eslint-disable-next-line no-case-declarations, @typescript-eslint/no-unsafe-assignment
+            const record = await dream
+              .associationQuery(associationName as any)
+              .connection('replica')
+              .first()
 
             if (record) {
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -76,7 +108,6 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
         }
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return data as Record<string, any>
     }
   }
