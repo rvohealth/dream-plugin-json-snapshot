@@ -1,9 +1,22 @@
 import { Dream } from '@rvoh/dream'
+import { BelongsToStatement } from '@rvoh/dream/dist/types/src/types/associations/belongsTo'
+import { HasManyStatement } from '@rvoh/dream/dist/types/src/types/associations/hasMany'
+import { HasOneStatement } from '@rvoh/dream/dist/types/src/types/associations/hasOne'
 
 type SnapshotableConstructor = new (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...args: any[]
 ) => object
+
+type AssociationMetadataMap = Record<
+  string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | BelongsToStatement<any, any, any, any>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | HasManyStatement<any, any, any, any>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | HasOneStatement<any, any, any, any>
+>
 
 export default function Snapshotable<T extends SnapshotableConstructor>(Base: T) {
   return class Snapshotable extends Base {
@@ -39,19 +52,20 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
         ...allowedAttributes,
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
-      const associationMap = dreamClass['associationMetadataMap']()
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      const associationMap = dreamClass['associationMetadataMap']() as AssociationMetadataMap
+
       for (const associationName of Object.keys(associationMap)) {
         if (hideFromSnapshotableFields.includes(associationName)) continue
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
         const associationMetadata = associationMap[associationName]
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if ((associationMetadata as HasManyStatement<any, any, any, any>).through) continue
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const hasManyRecords: Record<string, any>[] = []
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         switch (associationMetadata.type) {
           case 'HasMany':
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
