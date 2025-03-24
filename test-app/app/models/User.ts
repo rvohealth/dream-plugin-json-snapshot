@@ -1,6 +1,6 @@
 import { Decorators, DreamColumn, DreamConst } from '@rvoh/dream'
 import SnapshotableFollowThrough from '../../../src/SnapshotableFollowThrough'
-import SnapshotableHide from '../../../src/SnapshotableHide'
+import SnapshotableIgnore from '../../../src/SnapshotableIgnore'
 import Snapshotable from '../../../src/snapshotable'
 import ApplicationModel from './ApplicationModel'
 import Comment from './Comment'
@@ -19,7 +19,7 @@ export default class User extends Snapshotable(ApplicationModel) {
   public createdAt: DreamColumn<User, 'createdAt'>
   public updatedAt: DreamColumn<User, 'updatedAt'>
 
-  @SnapshotableHide()
+  @SnapshotableIgnore()
   public loginCount: DreamColumn<User, 'loginCount'>
 
   @Deco.HasMany('Post')

@@ -20,7 +20,7 @@ type AssociationMetadataMap = Record<
  *
  * `BelongsTo` associations are intentionally skipped, as are `through` associations, so Snapshotable automatically avoids circuits (which would lead to an infinite loop). To explicitly include a `through` association, decorate it with the `@SnapshotableFollowThrough()` decorator.
  *
- * NOTE: Snapshotable is not optimized to eliminate the N+1 problem, but it will leverage the read replica, if configured. Snapshotable builds a single object of the entire content tree, so the in-memory object may become quite large. As such, it may be advisable to leverage `@SnapshotableHide` to prevent full traversing the tree so that it can be split into chunks. It is recommended that Snapshotable is only used in a background job (see {@link https://psychicframework.com/docs/plugins/workers/overview}).
+ * NOTE: Snapshotable is not optimized to eliminate the N+1 problem, but it will leverage the read replica, if configured. Snapshotable builds a single object of the entire content tree, so the in-memory object may become quite large. As such, it may be advisable to leverage `@SnapshotableIgnore` to prevent full traversing the tree so that it can be split into chunks. It is recommended that Snapshotable is only used in a background job (see {@link https://psychicframework.com/docs/plugins/workers/overview}).
  *
  */
 export default function Snapshotable<T extends SnapshotableConstructor>(Base: T) {
@@ -35,7 +35,7 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
       if (!dream.isDreamInstance) throw new Error('Cannot call takeSnapshot on a non-Dream')
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      const snapshotableHideFields = ((dreamClass as any)['snapshotableHide'] || []) as string[]
+      const snapshotableIgnoreFields = ((dreamClass as any)['snapshotableIgnore'] || []) as string[]
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const snapshotableFollowThroughFields = ((dreamClass as any)['snapshotableFollowThrough'] ||
         []) as string[]
@@ -43,7 +43,7 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
 
       const allowedAttributes = Object.keys(attributes).reduce(
         (agg: Record<string, any>, columnName) => {
-          if (!snapshotableHideFields.includes(columnName)) {
+          if (!snapshotableIgnoreFields.includes(columnName)) {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             agg[columnName] = attributes[columnName]
           }
@@ -60,7 +60,7 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
       const associationMap = dreamClass['associationMetadataMap']() as AssociationMetadataMap
 
       for (const associationName of Object.keys(associationMap)) {
-        if (snapshotableHideFields.includes(associationName)) continue
+        if (snapshotableIgnoreFields.includes(associationName)) continue
 
         const associationMetadata = associationMap[associationName]
 
