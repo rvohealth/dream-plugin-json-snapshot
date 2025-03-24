@@ -1,7 +1,7 @@
 import { Decorators, DreamColumn, DreamConst } from '@rvoh/dream'
+import Snapshotable from '../../../src/Snapshotable2'
 import SnapshotableFollowThrough from '../../../src/SnapshotableFollowThrough'
 import SnapshotableIgnore from '../../../src/SnapshotableIgnore'
-import Snapshotable from '../../../src/snapshotable'
 import ApplicationModel from './ApplicationModel'
 import Comment from './Comment'
 import Post from './Post'
