@@ -10,7 +10,7 @@ describe('Snapshotable', () => {
     expect(snapshot.name).toEqual('fred')
   })
 
-  context('snapshotableHide is applied to one of the fields', () => {
+  context('SnapshotableIgnore is applied to one of the fields', () => {
     it('does not render those fields', async () => {
       const user = await User.create({ name: 'fred', email: 'fred@fred', loginCount: 2 })
 
@@ -97,7 +97,7 @@ describe('Snapshotable', () => {
         })
       })
 
-      context('snapshotableHide is applied to one of the fields', () => {
+      context('SnapshotableIgnore is applied to one of the fields', () => {
         it('does not render those fields', async () => {
           const user = await User.create({ name: 'fred', email: 'fred@fred' })
           await user.createAssociation('posts', { body: null, title: 'post1 title' })
@@ -133,7 +133,7 @@ describe('Snapshotable', () => {
         })
       })
 
-      context('snapshotableHide is applied to one of the fields', () => {
+      context('SnapshotableIgnore is applied to one of the fields', () => {
         it('does not render those fields', async () => {
           const user = await User.create({ name: 'fred', email: 'fred@fred' })
           await user.createAssociation('posts', { body: null, title: 'post1 title' })
