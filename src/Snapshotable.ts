@@ -69,10 +69,10 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
           if (ignoredThroughAssociation) continue
         }
 
-        if ((associationMetadata as HasManyStatement<any, any, any, any>).on) {
+        if ((associationMetadata as HasManyStatement<any, any, any, any>).and) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const requiredOrPassthroughClause = Object.values(
-            (associationMetadata as HasManyStatement<any, any, any, any>).on!
+            (associationMetadata as HasManyStatement<any, any, any, any>).and!
           ).find(value => value === DreamConst.required || value === DreamConst.passthrough)
           if (requiredOrPassthroughClause) continue
         }

@@ -5,7 +5,7 @@ import ApplicationModel from './ApplicationModel'
 import Comment from './Comment'
 import User from './User'
 
-const Deco = new Decorators<InstanceType<typeof Post>>()
+const Deco = new Decorators<typeof Post>()
 
 export default class Post extends Snapshotable(ApplicationModel) {
   public get table() {
@@ -27,13 +27,13 @@ export default class Post extends Snapshotable(ApplicationModel) {
   public comments: Comment[]
 
   @SnapshotableIgnore()
-  @Deco.HasMany('Comment', { on: { body: null } })
+  @Deco.HasMany('Comment', { and: { body: null } })
   public nullComments: Comment[]
 
   @Deco.HasOne('Comment')
   public mostRecentComment: Comment | null
 
   @SnapshotableIgnore()
-  @Deco.HasOne('Comment', { on: { body: null } })
+  @Deco.HasOne('Comment', { and: { body: null } })
   public mostRecentNullComment: Comment[]
 }

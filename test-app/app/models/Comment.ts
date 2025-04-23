@@ -3,7 +3,7 @@ import ApplicationModel from './ApplicationModel'
 import Post from './Post'
 import User from './User'
 
-const Deco = new Decorators<InstanceType<typeof Comment>>()
+const Deco = new Decorators<typeof Comment>()
 
 export default class Comment extends ApplicationModel {
   public get table() {

@@ -1,10 +1,10 @@
-import { DreamApplication } from '@rvoh/dream'
+import { DreamApp } from '@rvoh/dream'
 import importAll from '../app/helpers/importAll'
 import importDefault from '../app/helpers/importDefault'
 import srcPath from '../app/helpers/srcPath'
 import inflections from './inflections'
 
-export default async function (dreamApp: DreamApplication) {
+export default async function (dreamApp: DreamApp) {
   await dreamApp.load('models', srcPath('app', 'models'), path => importDefault(path))
   await dreamApp.load('serializers', srcPath('app', 'serializers'), path => importAll(path))
   await dreamApp.load('services', srcPath('app', 'services'), path => importDefault(path))

@@ -1,6 +1,6 @@
-import { DreamApplication } from '@rvoh/dream'
+import { DreamApp } from '@rvoh/dream'
 import { provideDreamViteMatchers, truncate } from '@rvoh/dream-spec-helpers'
-import initializeDreamApplication from '../../test-app/cli/helpers/initializeDreamApplication'
+import initializeDreamApp from '../../test-app/cli/helpers/initializeDreamApp'
 
 provideDreamViteMatchers()
 
@@ -16,11 +16,11 @@ provideDreamViteMatchers()
 
 beforeEach(async () => {
   try {
-    await initializeDreamApplication()
+    await initializeDreamApp()
   } catch (error) {
     console.error(error)
     throw error
   }
 
-  await truncate(DreamApplication)
+  await truncate(DreamApp)
 })

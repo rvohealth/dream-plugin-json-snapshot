@@ -1,9 +1,9 @@
 import '../../test-app/conf/loadEnv'
 
-import initializeDreamApplication from '../../test-app/cli/helpers/initializeDreamApplication'
+import initializeDreamApp from '../../test-app/cli/helpers/initializeDreamApp'
 
 export async function setup() {
-  await initializeDreamApplication()
+  await initializeDreamApp()
 }
 
 export async function teardown() {}

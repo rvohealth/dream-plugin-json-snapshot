@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@rvoh/dream-plugin-json-snapshot",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A plugin for extracting model attributes and associations into JSON",
   "author": "RVO Health",
   "repository": {
@@ -35,8 +35,8 @@
   },
   "devDependencies": {
     "@eslint/js": "=9.0.0",
-    "@rvoh/dream": "^0.31.1",
-    "@rvoh/dream-spec-helpers": "^0.2.0",
+    "@rvoh/dream": "^0.39.0",
+    "@rvoh/dream-spec-helpers": "^0.2.4",
     "@types/luxon": "^3.4.2",
     "@types/node": "^22.5.1",
     "@types/pg": "^8",

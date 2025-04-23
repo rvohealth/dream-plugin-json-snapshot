@@ -6,7 +6,7 @@ import ApplicationModel from './ApplicationModel'
 import Comment from './Comment'
 import Post from './Post'
 
-const Deco = new Decorators<InstanceType<typeof User>>()
+const Deco = new Decorators<typeof User>()
 
 export default class User extends Snapshotable(ApplicationModel) {
   public get table() {
@@ -25,10 +25,10 @@ export default class User extends Snapshotable(ApplicationModel) {
   @Deco.HasMany('Post')
   public posts: Post[]
 
-  @Deco.HasMany('Post', { on: { title: DreamConst.required } })
+  @Deco.HasMany('Post', { and: { title: DreamConst.required } })
   public postsWithRequiredOnClause: Post[]
 
-  @Deco.HasMany('Post', { on: { title: DreamConst.passthrough } })
+  @Deco.HasMany('Post', { and: { title: DreamConst.passthrough } })
   public postsWithPassthroughOnClause: Post[]
 
   @Deco.HasMany('Comment', { through: 'posts' })
