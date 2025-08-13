@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     dir: './spec',
     globals: true,
-    setupFiles: ['luxon-jest-matchers', './spec/setup/hooks.ts'],
+    setupFiles: ['./spec/setup/hooks.ts'],
     fileParallelism: false,
     maxConcurrency: 1,
     maxWorkers: 1,

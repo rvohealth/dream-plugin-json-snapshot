@@ -32,7 +32,7 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
 
     public async _takeSnapshot(dream: Dream): Promise<Record<string, any>> {
       const dreamClass = dream.constructor as typeof Dream
-      if (!dream.isDreamInstance) throw new Error('Cannot call takeSnapshot on a non-Dream')
+      if (!(dream instanceof Dream)) throw new Error('Cannot call takeSnapshot on a non-Dream')
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const snapshotableIgnoreFields = ((dreamClass as any)['snapshotableIgnore'] || []) as string[]
