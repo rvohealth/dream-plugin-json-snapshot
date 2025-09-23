@@ -84,6 +84,7 @@ export interface Comments {
 export interface Posts {
   body: string | null;
   createdAt: Timestamp;
+  deletedAt: Timestamp | null;
   id: Generated<Int8>;
   subtitle: string | null;
   title: string | null;

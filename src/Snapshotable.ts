@@ -84,6 +84,7 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
             await dream
               .associationQuery(associationName as any)
               .connection('replica')
+              .removeDefaultScope('dream:SoftDelete')
               .findEach(async record => {
                 const associationSnapshot = await this._takeSnapshot(record as Dream)
                 hasManyRecords.push(associationSnapshot)
@@ -97,6 +98,7 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
             // eslint-disable-next-line no-case-declarations, @typescript-eslint/no-unsafe-assignment
             const record = await dream
               .associationQuery(associationName as any)
+              .removeDefaultScope('dream:SoftDelete')
               .connection('replica')
               .first()
 

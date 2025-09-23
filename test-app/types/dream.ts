@@ -156,10 +156,10 @@ export const schema = {
   posts: {
     serializerKeys: [],
     scopes: {
-      default: [],
+      default: ['dream:SoftDelete'],
       named: [],
     },
-    nonJsonColumnNames: ['body', 'createdAt', 'id', 'subtitle', 'title', 'updatedAt', 'userId'],
+    nonJsonColumnNames: ['body', 'createdAt', 'deletedAt', 'id', 'subtitle', 'title', 'updatedAt', 'userId'],
     columns: {
       body: {
         coercedType: {} as string | null,
@@ -177,6 +177,15 @@ export const schema = {
         enumValues: null,
         dbType: 'timestamp without time zone',
         allowNull: false,
+        isArray: false,
+      },
+      deletedAt: {
+        coercedType: {} as DateTime | null,
+        enumType: null,
+        enumArrayType: null,
+        enumValues: null,
+        dbType: 'timestamp without time zone',
+        allowNull: true,
         isArray: false,
       },
       id: {
@@ -388,7 +397,7 @@ export const schema = {
 
 export const connectionTypeConfig = {
   passthroughColumns: ['title'],
-  allDefaultScopeNames: [],
+  allDefaultScopeNames: ['dream:SoftDelete'],
   globalNames: {
     models: {
       'Comment': 'comments',
