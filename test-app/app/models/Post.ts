@@ -1,4 +1,4 @@
-import { Decorators, DreamColumn } from '@rvoh/dream'
+import { Decorators, DreamColumn, SoftDelete } from '@rvoh/dream'
 import Snapshotable from '../../../src/Snapshotable'
 import SnapshotableIgnore from '../../../src/SnapshotableIgnore'
 import ApplicationModel from './ApplicationModel'
@@ -7,6 +7,7 @@ import User from './User'
 
 const Deco = new Decorators<typeof Post>()
 
+@SoftDelete()
 export default class Post extends Snapshotable(ApplicationModel) {
   public get table() {
     return 'posts' as const
@@ -16,6 +17,7 @@ export default class Post extends Snapshotable(ApplicationModel) {
   public body: DreamColumn<Post, 'body'>
   public title: DreamColumn<Post, 'title'>
   public subtitle: DreamColumn<Post, 'subtitle'>
+  public deletedAt: DreamColumn<Post, 'deletedAt'>
   public createdAt: DreamColumn<Post, 'createdAt'>
   public updatedAt: DreamColumn<Post, 'updatedAt'>
 

@@ -33,6 +33,18 @@ describe('Snapshotable', () => {
         expect(snapshot.posts[1].title).toEqual('post2 title')
       })
 
+      context('soft-deleted records', () => {
+        it('are included', async () => {
+          const user = await User.create({ name: 'fred', email: 'fred@fred' })
+          const post = await user.createAssociation('posts', { body: 'post1 body', title: 'post1 title' })
+          await post.destroy()
+
+          const snapshot = await user.takeSnapshot()
+          expect(snapshot.posts[0].body).toEqual('post1 body')
+          expect(snapshot.posts[0].title).toEqual('post1 title')
+        })
+      })
+
       context('through associations', () => {
         it('are omitted since the associations they pass through will already capture that data', async () => {
           const user = await User.create({ name: 'fred', email: 'fred@fred' })
@@ -117,6 +129,18 @@ describe('Snapshotable', () => {
         const snapshot = await user.takeSnapshot()
         expect(snapshot.mostRecentPost.body).toEqual('post1 body')
         expect(snapshot.mostRecentPost.title).toEqual('post1 title')
+      })
+
+      context('soft-deleted records', () => {
+        it('are included', async () => {
+          const user = await User.create({ name: 'fred', email: 'fred@fred' })
+          const post = await user.createAssociation('posts', { body: 'post1 body', title: 'post1 title' })
+          await post.destroy()
+
+          const snapshot = await user.takeSnapshot()
+          expect(snapshot.mostRecentPost.body).toEqual('post1 body')
+          expect(snapshot.mostRecentPost.title).toEqual('post1 title')
+        })
       })
 
       context('nested associations', () => {
