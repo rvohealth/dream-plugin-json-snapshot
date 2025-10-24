@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@rvoh/dream-plugin-json-snapshot",
-  "version": "1.5.1",
+  "version": "2.0.0-alpha.1",
   "description": "A plugin for extracting model attributes and associations into JSON",
   "author": "RVO Health",
   "repository": {
@@ -26,6 +26,7 @@
   ],
   "scripts": {
     "build": "echo \"building cjs...\" && rm -rf dist && npx tsc -p ./tsconfig.cjs.build.json && echo \"building esm...\" && npx tsc -p ./tsconfig.esm.build.json",
+    "build:test-app": "rm -rf dist && echo \"building test app to esm...\" && npx tsc -p ./tsconfig.esm.build.test-app.json && echo \"building test app to cjs...\" && npx tsc -p ./tsconfig.cjs.build.test-app.json",
     "prepack": "yarn build",
     "dream": "NODE_ENV=${NODE_ENV:-test} yarn dreamts",
     "dreamts": "node --experimental-specifier-resolution=node --import ./bin/esm.js ./test-app/cli/index.ts",
@@ -35,7 +36,7 @@
   },
   "devDependencies": {
     "@eslint/js": "=9.0.0",
-    "@rvoh/dream": "^1.10.1",
+    "@rvoh/dream": "=2.0.0-alpha.2",
     "@rvoh/dream-spec-helpers": "^1.2.1",
     "@types/node": "^22.5.1",
     "@types/pg": "^8",
@@ -43,7 +44,7 @@
     "dotenv": "^16.4.5",
     "eslint": "=9.0.0",
     "kysely": "^0.28.7",
-    "kysely-codegen": "^0.16.5",
+    "kysely-codegen": "~0.19.0",
     "pg": "^8.12.0",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
@@ -53,6 +54,6 @@
   },
   "packageManager": "yarn@4.7.0",
   "peerDependencies": {
-    "@rvoh/dream": "*"
+    "@rvoh/dream": "^2.0.0-alpha.2"
   }
 }

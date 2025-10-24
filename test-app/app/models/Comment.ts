@@ -1,12 +1,13 @@
-import { Decorators, DreamColumn } from '@rvoh/dream'
-import ApplicationModel from './ApplicationModel'
-import Post from './Post'
-import User from './User'
+import { Decorators } from '@rvoh/dream'
+import { DreamColumn } from '@rvoh/dream/types'
+import ApplicationModel from './ApplicationModel.js'
+import Post from './Post.js'
+import User from './User.js'
 
 const Deco = new Decorators<typeof Comment>()
 
 export default class Comment extends ApplicationModel {
-  public get table() {
+  public override get table() {
     return 'comments' as const
   }
 

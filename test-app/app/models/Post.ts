@@ -1,15 +1,16 @@
-import { Decorators, DreamColumn, SoftDelete } from '@rvoh/dream'
-import Snapshotable from '../../../src/Snapshotable'
-import SnapshotableIgnore from '../../../src/SnapshotableIgnore'
-import ApplicationModel from './ApplicationModel'
-import Comment from './Comment'
-import User from './User'
+import { Decorators, SoftDelete } from '@rvoh/dream'
+import { DreamColumn } from '@rvoh/dream/types'
+import Snapshotable from '../../../src/Snapshotable.js'
+import SnapshotableIgnore from '../../../src/SnapshotableIgnore.js'
+import ApplicationModel from './ApplicationModel.js'
+import Comment from './Comment.js'
+import User from './User.js'
 
 const Deco = new Decorators<typeof Post>()
 
 @SoftDelete()
 export default class Post extends Snapshotable(ApplicationModel) {
-  public get table() {
+  public override get table() {
     return 'posts' as const
   }
 

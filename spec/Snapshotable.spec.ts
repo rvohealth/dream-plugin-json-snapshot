@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import User from '../test-app/app/models/User'
+
+import User from '../test-app/app/models/User.js'
 
 describe('Snapshotable', () => {
   it("renders a JSON representation of a model's attributes", async () => {

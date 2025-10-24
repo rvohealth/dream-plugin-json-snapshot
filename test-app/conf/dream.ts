@@ -1,13 +1,12 @@
 import { DreamApp } from '@rvoh/dream'
-import importAll from '../app/helpers/importAll'
-import importDefault from '../app/helpers/importDefault'
-import srcPath from '../app/helpers/srcPath'
-import inflections from './inflections'
+import importAll from '../app/helpers/importAll.js'
+import importDefault from '../app/helpers/importDefault.js'
+import srcPath from '../app/helpers/srcPath.js'
+import inflections from './inflections.js'
 
 export default async function (dreamApp: DreamApp) {
   await dreamApp.load('models', srcPath('app', 'models'), path => importDefault(path))
   await dreamApp.load('serializers', srcPath('app', 'serializers'), path => importAll(path))
-  await dreamApp.load('services', srcPath('app', 'services'), path => importDefault(path))
 
   dreamApp.set('projectRoot', srcPath('..'))
   dreamApp.set('primaryKeyType', 'bigserial')
@@ -21,7 +20,6 @@ export default async function (dreamApp: DreamApp) {
     factories: 'test-app/spec/factories',
     models: 'test-app/app/models',
     serializers: 'test-app/app/serializers',
-    services: 'test-app/app/services',
     modelSpecs: 'test-app/spec/unit/models',
     types: 'test-app/types',
   })
