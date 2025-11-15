@@ -1,3 +1,8 @@
+## 2.0.0
+
+- namespace exports
+- support Dream 2.0
+
 ## 1.5.1
 
 Capture soft-deleted records when taking snapshots
