@@ -513,7 +513,7 @@ __metadata:
   resolution: "@rvoh/dream-plugin-json-snapshot@workspace:."
   dependencies:
     "@eslint/js": "npm:=9.0.0"
-    "@rvoh/dream": "npm:=2.0.0"
+    "@rvoh/dream": "npm:^2.0.0"
     "@rvoh/dream-spec-helpers": "npm:^1.2.1"
     "@types/node": "npm:^22.5.1"
     "@types/pg": "npm:^8"
@@ -546,7 +546,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rvoh/dream@npm:=2.0.0":
+"@rvoh/dream@npm:^2.0.0":
   version: 2.0.0
   resolution: "@rvoh/dream@npm:2.0.0"
   dependencies:
