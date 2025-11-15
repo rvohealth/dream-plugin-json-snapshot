@@ -1,4 +1,5 @@
-import { DecoratorContext, Dream } from '@rvoh/dream'
+import { Dream } from '@rvoh/dream'
+import { DecoratorContext } from '@rvoh/dream/types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function SnapshotableIgnore(): any {

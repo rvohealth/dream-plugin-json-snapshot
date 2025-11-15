@@ -7,9 +7,9 @@
 
 import '../conf/loadEnv'
 
-import { DreamCLI } from '@rvoh/dream'
+import { DreamCLI } from '@rvoh/dream/system'
 import { Command } from 'commander'
-import initializeDreamApp from './helpers/initializeDreamApp'
+import initializeDreamApp from './helpers/initializeDreamApp.js'
 
 const program = new Command()
 

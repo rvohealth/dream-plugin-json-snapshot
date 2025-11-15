@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dream, DreamConst } from '@rvoh/dream'
-import { BelongsToStatement } from '@rvoh/dream/dist/types/src/types/associations/belongsTo'
-import { HasManyStatement } from '@rvoh/dream/dist/types/src/types/associations/hasMany'
-import { HasOneStatement } from '@rvoh/dream/dist/types/src/types/associations/hasOne'
+import { BelongsToStatement, HasManyStatement, HasOneStatement } from '@rvoh/dream/types'
 
 type SnapshotableConstructor = new (...args: any[]) => object
 
@@ -62,7 +60,7 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
       for (const associationName of Object.keys(associationMap)) {
         if (snapshotableIgnoreFields.includes(associationName)) continue
 
-        const associationMetadata = associationMap[associationName]
+        const associationMetadata = associationMap[associationName]!
 
         if ((associationMetadata as HasManyStatement<any, any, any, any>).through) {
           const ignoredThroughAssociation = !snapshotableFollowThroughFields.includes(associationName)

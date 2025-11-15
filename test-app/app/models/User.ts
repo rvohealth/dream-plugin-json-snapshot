@@ -1,15 +1,16 @@
-import { Decorators, DreamColumn, DreamConst } from '@rvoh/dream'
-import Snapshotable from '../../../src/Snapshotable'
-import SnapshotableFollowThrough from '../../../src/SnapshotableFollowThrough'
-import SnapshotableIgnore from '../../../src/SnapshotableIgnore'
-import ApplicationModel from './ApplicationModel'
-import Comment from './Comment'
-import Post from './Post'
+import { Decorators, DreamConst } from '@rvoh/dream'
+import { DreamColumn } from '@rvoh/dream/types'
+import Snapshotable from '../../../src/Snapshotable.js'
+import SnapshotableFollowThrough from '../../../src/SnapshotableFollowThrough.js'
+import SnapshotableIgnore from '../../../src/SnapshotableIgnore.js'
+import ApplicationModel from './ApplicationModel.js'
+import Comment from './Comment.js'
+import Post from './Post.js'
 
 const Deco = new Decorators<typeof User>()
 
 export default class User extends Snapshotable(ApplicationModel) {
-  public get table() {
+  public override get table() {
     return 'users' as const
   }
 
