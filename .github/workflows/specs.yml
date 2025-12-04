@@ -34,7 +34,6 @@ jobs:
       DB_PASSWORD: postgres
       DB_PORT: 5432
       TZ: UTC
-      YARN_CACHE_FOLDER: ~/.yarn-cache
       DREAM_PARALLEL_TESTS: 4
 
     steps:
@@ -45,18 +44,6 @@ jobs:
 
       - run: corepack enable
 
-      - name: Cache node_modules
-        id: cache-node-modules
-        uses: actions/cache@v4
-        with:
-          path: ~/.yarn-cache
-          key: ${{ runner.os }}-cache-node-modules-${{ hashFiles('**/yarn.lock') }}
-
-      - if: ${{ steps.cache-node-modules.outputs.cache-hit != 'true' }}
-        name: List the state of node modules
-        continue-on-error: true
-        run: yarn list
-
-      - run: yarn install --immutable
-      - run: APP_ROOT_PATH=$(pwd) yarn dream db:migrate --skip-sync
-      - run: yarn spec
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm dream db:migrate --skip-sync
+      - run: pnpm spec

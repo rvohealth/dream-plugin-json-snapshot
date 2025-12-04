@@ -27,19 +27,20 @@
   "scripts": {
     "build": "echo \"building cjs...\" && rm -rf dist && npx tsc -p ./tsconfig.cjs.build.json && echo \"building esm...\" && npx tsc -p ./tsconfig.esm.build.json",
     "build:test-app": "rm -rf dist && echo \"building test app to esm...\" && npx tsc -p ./tsconfig.esm.build.test-app.json && echo \"building test app to cjs...\" && npx tsc -p ./tsconfig.cjs.build.test-app.json",
-    "prepack": "yarn build",
-    "dream": "NODE_ENV=${NODE_ENV:-test} yarn dreamts",
+    "prepack": "pnpm build",
+    "dream": "NODE_ENV=${NODE_ENV:-test} pnpm dreamts",
     "dreamts": "node --experimental-specifier-resolution=node --import ./bin/esm.js ./test-app/cli/index.ts",
     "spec": "vitest --config=./spec/vite.config.ts",
-    "lint": "yarn run eslint --no-warn-ignored \"src/**/*.ts\" \"spec/**/*.ts\" \"test-app/**/*.ts\" && yarn run prettier . --check",
-    "format": "yarn run prettier . --write"
+    "lint": "pnpm eslint --no-warn-ignored \"src/**/*.ts\" \"spec/**/*.ts\" \"test-app/**/*.ts\" && pnpm prettier . --check",
+    "format": "pnpm prettier . --write"
   },
   "devDependencies": {
-    "@eslint/js": "=9.0.0",
+    "@eslint/js": "^9.19.0",
     "@rvoh/dream": "^2.0.1",
     "@rvoh/dream-spec-helpers": "^2.0.0",
     "@types/node": "^22.5.1",
     "@types/pg": "^8",
+    "@typescript-eslint/parser": "^8.48.1",
     "commander": "^12.1.0",
     "dotenv": "^16.4.5",
     "eslint": "=9.0.0",
@@ -49,10 +50,9 @@
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
-    "typescript-eslint": "=7.18.0",
+    "typescript-eslint": "^8.48.1",
     "vitest": "^4.0.10"
   },
-  "packageManager": "yarn@4.7.0",
   "peerDependencies": {
     "@rvoh/dream": "^2.0.0"
   }

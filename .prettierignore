@@ -2,7 +2,6 @@
 docs/*
 test-app/types/*
 test-app/client/schema.ts
-.yarn/
-.yarnrc.yml
+pnpm-lock.yaml
 .github/
 dist

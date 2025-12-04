@@ -6,7 +6,8 @@ import typescriptParser from '@typescript-eslint/parser'
 
 const config = typescriptEslint.config(
   eslint.configs.recommended,
-  ...typescriptEslint.configs.recommendedTypeChecked,
+  typescriptEslint.configs.recommendedTypeChecked,
+
   {
     ignores: [
       'test-app/types/*',
@@ -15,6 +16,7 @@ const config = typescriptEslint.config(
       'test-app/client/schema.ts',
     ],
   },
+
   {
     files: ['**/*.ts'],
     languageOptions: {
