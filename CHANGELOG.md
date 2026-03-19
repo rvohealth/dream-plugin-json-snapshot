@@ -1,3 +1,7 @@
+## 2.0.1
+
+Bump vulnerable packages
+
 ## 2.0.0
 
 - support Dream 2.0

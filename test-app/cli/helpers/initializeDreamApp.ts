@@ -1,6 +1,7 @@
 import { DreamApp } from '@rvoh/dream'
+import { DreamAppInitOptions } from '@rvoh/dream/types'
 import dreamConfCb from '../../conf/dream.js'
 
-export default async function initializeDreamApp() {
-  return await DreamApp.init(dreamConfCb)
+export default async function initializeDreamApp(opts: DreamAppInitOptions = {}) {
+  return await DreamApp.init(dreamConfCb, opts)
 }
