@@ -11,6 +11,7 @@ export default async function (dreamApp: DreamApp) {
   dreamApp.set('projectRoot', srcPath('..'))
   dreamApp.set('primaryKeyType', 'bigserial')
   dreamApp.set('inflections', inflections)
+  dreamApp.set('packageManager', 'pnpm')
 
   // provides a list of path overrides for your app. This is optional, and will default
   // to the paths expected for a typical psychic application.

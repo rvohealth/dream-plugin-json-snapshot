@@ -1,4 +1,3 @@
-
 /*
 
                                     ,▄█▄                 
@@ -57,8 +56,13 @@ us humans, he says:
 
 */
 
-import { type CalendarDate, type DateTime } from '@rvoh/dream'
-
+import {
+  type CalendarDate,
+  type DateTime,
+  type ClockTime,
+  type ClockTimeTz,
+} from '@rvoh/dream'
+import {} from './db.js'
 
 export const schema = {
   comments: {
@@ -67,7 +71,15 @@ export const schema = {
       default: [],
       named: [],
     },
-    nonJsonColumnNames: ['body', 'createdAt', 'id', 'numLikes', 'postId', 'updatedAt', 'userId'],
+    nonJsonColumnNames: [
+      'body',
+      'createdAt',
+      'id',
+      'numLikes',
+      'postId',
+      'updatedAt',
+      'userId',
+    ],
     columns: {
       body: {
         coercedType: {} as string | null,
@@ -161,7 +173,16 @@ export const schema = {
       default: ['dream:SoftDelete'],
       named: [],
     },
-    nonJsonColumnNames: ['body', 'createdAt', 'deletedAt', 'id', 'subtitle', 'title', 'updatedAt', 'userId'],
+    nonJsonColumnNames: [
+      'body',
+      'createdAt',
+      'deletedAt',
+      'id',
+      'subtitle',
+      'title',
+      'updatedAt',
+      'userId',
+    ],
     columns: {
       body: {
         coercedType: {} as string | null,
@@ -291,7 +312,14 @@ export const schema = {
       default: [],
       named: [],
     },
-    nonJsonColumnNames: ['createdAt', 'email', 'id', 'loginCount', 'name', 'updatedAt'],
+    nonJsonColumnNames: [
+      'createdAt',
+      'email',
+      'id',
+      'loginCount',
+      'name',
+      'updatedAt',
+    ],
     columns: {
       createdAt: {
         coercedType: {} as DateTime,
@@ -413,9 +441,9 @@ export const connectionTypeConfig = {
   allDefaultScopeNames: ['dream:SoftDelete'],
   globalNames: {
     models: {
-      'Comment': 'comments',
-      'Post': 'posts',
-      'User': 'users'
+      Comment: 'comments',
+      Post: 'posts',
+      User: 'users',
     },
   },
 } as const
