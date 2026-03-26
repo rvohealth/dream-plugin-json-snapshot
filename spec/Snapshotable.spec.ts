@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
+import SnapshotableCannotPreloadRequiredOrPassthroughAssociation from '../src/errors/SnapshotableCannotPreloadRequiredOrPassthroughAssociation.js'
 import User from '../test-app/app/models/User.js'
 
 describe('Snapshotable', () => {
@@ -75,22 +77,56 @@ describe('Snapshotable', () => {
       })
 
       context('associations with required on-clause', () => {
-        it('are omitted since the on-clause cannot be provided automatically', async () => {
+        it('are omitted when decorated with @SnapshotableIgnore', async () => {
           const user = await User.create({ name: 'fred', email: 'fred@fred' })
           await user.createAssociation('posts', { title: 'My Title' })
 
           const snapshot = await user.takeSnapshot()
           expect(snapshot.postsWithRequiredOnClause).toBeUndefined()
         })
+
+        it('throws when not decorated with @SnapshotableIgnore', async () => {
+          const user = await User.create({ name: 'fred', email: 'fred@fred' })
+
+          const originalIgnore = (User as any).snapshotableIgnore as string[]
+          ;(User as any).snapshotableIgnore = originalIgnore.filter(
+            (f: string) => f !== 'postsWithRequiredOnClause'
+          )
+
+          try {
+            await expect(user.takeSnapshot()).rejects.toThrow(
+              SnapshotableCannotPreloadRequiredOrPassthroughAssociation
+            )
+          } finally {
+            ;(User as any).snapshotableIgnore = originalIgnore
+          }
+        })
       })
 
       context('associations with passthrough on-clause', () => {
-        it('are omitted since the on-clause cannot be provided automatically', async () => {
+        it('are omitted when decorated with @SnapshotableIgnore', async () => {
           const user = await User.create({ name: 'fred', email: 'fred@fred' })
           await user.createAssociation('posts', { title: 'My Title' })
 
           const snapshot = await user.takeSnapshot()
           expect(snapshot.postsWithPassthroughOnClause).toBeUndefined()
+        })
+
+        it('throws when not decorated with @SnapshotableIgnore', async () => {
+          const user = await User.create({ name: 'fred', email: 'fred@fred' })
+
+          const originalIgnore = (User as any).snapshotableIgnore as string[]
+          ;(User as any).snapshotableIgnore = originalIgnore.filter(
+            (f: string) => f !== 'postsWithPassthroughOnClause'
+          )
+
+          try {
+            await expect(user.takeSnapshot()).rejects.toThrow(
+              SnapshotableCannotPreloadRequiredOrPassthroughAssociation
+            )
+          } finally {
+            ;(User as any).snapshotableIgnore = originalIgnore
+          }
         })
       })
 

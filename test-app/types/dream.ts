@@ -1,4 +1,3 @@
-
 /*
 
                                     ,▄█▄                 
@@ -57,8 +56,13 @@ us humans, he says:
 
 */
 
-import { type CalendarDate, type DateTime } from '@rvoh/dream'
-
+import {
+  type CalendarDate,
+  type DateTime,
+  type ClockTime,
+  type ClockTimeTz,
+} from '@rvoh/dream'
+import {} from './db.js'
 
 export const schema = {
   comments: {
@@ -67,7 +71,15 @@ export const schema = {
       default: [],
       named: [],
     },
-    nonJsonColumnNames: ['body', 'createdAt', 'id', 'numLikes', 'postId', 'updatedAt', 'userId'],
+    nonJsonColumnNames: [
+      'body',
+      'createdAt',
+      'id',
+      'numLikes',
+      'postId',
+      'updatedAt',
+      'userId',
+    ],
     columns: {
       body: {
         coercedType: {} as string | null,
@@ -161,7 +173,16 @@ export const schema = {
       default: ['dream:SoftDelete'],
       named: [],
     },
-    nonJsonColumnNames: ['body', 'createdAt', 'deletedAt', 'id', 'subtitle', 'title', 'updatedAt', 'userId'],
+    nonJsonColumnNames: [
+      'body',
+      'createdAt',
+      'deletedAt',
+      'id',
+      'subtitle',
+      'title',
+      'updatedAt',
+      'userId',
+    ],
     columns: {
       body: {
         coercedType: {} as string | null,
@@ -285,13 +306,96 @@ export const schema = {
       },
     },
   },
+  tree_nodes: {
+    serializerKeys: [],
+    scopes: {
+      default: [],
+      named: [],
+    },
+    nonJsonColumnNames: ['createdAt', 'id', 'name', 'treeNodeId', 'updatedAt'],
+    columns: {
+      createdAt: {
+        coercedType: {} as DateTime,
+        enumType: null,
+        enumArrayType: null,
+        enumValues: null,
+        dbType: 'timestamp without time zone',
+        allowNull: false,
+        isArray: false,
+      },
+      id: {
+        coercedType: {} as string,
+        enumType: null,
+        enumArrayType: null,
+        enumValues: null,
+        dbType: 'bigint',
+        allowNull: false,
+        isArray: false,
+      },
+      name: {
+        coercedType: {} as string,
+        enumType: null,
+        enumArrayType: null,
+        enumValues: null,
+        dbType: 'character varying',
+        allowNull: false,
+        isArray: false,
+      },
+      treeNodeId: {
+        coercedType: {} as string | null,
+        enumType: null,
+        enumArrayType: null,
+        enumValues: null,
+        dbType: 'bigint',
+        allowNull: true,
+        isArray: false,
+      },
+      updatedAt: {
+        coercedType: {} as DateTime,
+        enumType: null,
+        enumArrayType: null,
+        enumValues: null,
+        dbType: 'timestamp without time zone',
+        allowNull: false,
+        isArray: false,
+      },
+    },
+    virtualColumns: [],
+    associations: {
+      children: {
+        type: 'HasMany',
+        foreignKey: 'treeNodeId',
+        foreignKeyTypeColumn: null,
+        tables: ['tree_nodes'],
+        optional: null,
+        requiredAndClauses: null,
+        passthroughAndClauses: null,
+      },
+      parent: {
+        type: 'BelongsTo',
+        foreignKey: 'treeNodeId',
+        foreignKeyTypeColumn: null,
+        tables: ['tree_nodes'],
+        optional: true,
+        requiredAndClauses: null,
+        passthroughAndClauses: null,
+      },
+    },
+  },
   users: {
     serializerKeys: [],
     scopes: {
       default: [],
       named: [],
     },
-    nonJsonColumnNames: ['createdAt', 'email', 'id', 'loginCount', 'name', 'updatedAt'],
+    nonJsonColumnNames: [
+      'createdAt',
+      'email',
+      'id',
+      'loginCount',
+      'name',
+      'updatedAt',
+    ],
     columns: {
       createdAt: {
         coercedType: {} as DateTime,
@@ -413,9 +517,10 @@ export const connectionTypeConfig = {
   allDefaultScopeNames: ['dream:SoftDelete'],
   globalNames: {
     models: {
-      'Comment': 'comments',
-      'Post': 'posts',
-      'User': 'users'
+      Comment: 'comments',
+      Post: 'posts',
+      TreeNode: 'tree_nodes',
+      User: 'users',
     },
   },
 } as const

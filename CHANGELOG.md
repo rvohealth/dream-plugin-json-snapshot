@@ -1,3 +1,7 @@
+## 2.1.0
+
+- generate the full load tree and use `.load(...).execute(...)` to avoid exponential N+1 problem when generating the JSON snapshot
+
 ## 2.0.0
 
 - support Dream 2.0
