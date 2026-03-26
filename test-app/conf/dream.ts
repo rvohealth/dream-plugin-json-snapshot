@@ -8,6 +8,7 @@ export default async function (dreamApp: DreamApp) {
   await dreamApp.load('models', srcPath('app', 'models'), path => importDefault(path))
   await dreamApp.load('serializers', srcPath('app', 'serializers'), path => importAll(path))
 
+  dreamApp.set('packageManager', 'pnpm')
   dreamApp.set('projectRoot', srcPath('..'))
   dreamApp.set('primaryKeyType', 'bigserial')
   dreamApp.set('inflections', inflections)
@@ -36,13 +37,15 @@ export default async function (dreamApp: DreamApp) {
       port: parseInt(process.env.DB_PORT!),
       useSsl: process.env.DB_USE_SSL === '1',
     },
-    replica: {
-      user: process.env.DB_USER!,
-      password: process.env.DB_PASSWORD!,
-      host: process.env.REPLICA_DB_HOST!,
-      name: process.env.REPLICA_DB_NAME!,
-      port: parseInt(process.env.DB_PORT!),
-      useSsl: process.env.DB_USE_SSL === '1',
-    },
+    replica: process.env.REPLICA_DB_HOST
+      ? {
+          user: process.env.DB_USER!,
+          password: process.env.DB_PASSWORD!,
+          host: process.env.REPLICA_DB_HOST,
+          name: process.env.REPLICA_DB_NAME!,
+          port: parseInt(process.env.DB_PORT!),
+          useSsl: process.env.DB_USE_SSL === '1',
+        }
+      : undefined,
   })
 }

@@ -26,9 +26,11 @@ export default class User extends Snapshotable(ApplicationModel) {
   @Deco.HasMany('Post')
   public posts: Post[]
 
+  @SnapshotableIgnore()
   @Deco.HasMany('Post', { and: { title: DreamConst.required } })
   public postsWithRequiredOnClause: Post[]
 
+  @SnapshotableIgnore()
   @Deco.HasMany('Post', { and: { title: DreamConst.passthrough } })
   public postsWithPassthroughOnClause: Post[]
 

@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@rvoh/dream-plugin-json-snapshot",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A plugin for extracting model attributes and associations into JSON",
   "author": "RVO Health",
   "repository": {
@@ -25,8 +25,8 @@
     "dist/**/*"
   ],
   "scripts": {
-    "build": "echo \"building cjs...\" && rm -rf dist && npx tsc -p ./tsconfig.cjs.build.json && echo \"building esm...\" && npx tsc -p ./tsconfig.esm.build.json",
-    "build:test-app": "rm -rf dist && echo \"building test app to esm...\" && npx tsc -p ./tsconfig.esm.build.test-app.json && echo \"building test app to cjs...\" && npx tsc -p ./tsconfig.cjs.build.test-app.json",
+    "build": "echo \"building cjs...\" && rm -rf dist && tsc -p ./tsconfig.cjs.build.json && echo \"building esm...\" && tsc -p ./tsconfig.esm.build.json",
+    "build:test-app": "rm -rf dist && echo \"building test app to esm...\" && tsc -p ./tsconfig.esm.build.test-app.json && echo \"building test app to cjs...\" && tsc -p ./tsconfig.cjs.build.test-app.json",
     "prepack": "pnpm build",
     "dream": "NODE_ENV=${NODE_ENV:-test} pnpm dreamts",
     "dreamts": "node --experimental-specifier-resolution=node --import ./bin/esm.js ./test-app/cli/index.ts",
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
-    "@rvoh/dream": "^2.0.1",
+    "@rvoh/dream": "^2.6.0",
     "@rvoh/dream-spec-helpers": "^2.0.0",
     "@types/node": "^22.5.1",
     "@types/pg": "^8",
@@ -54,6 +54,6 @@
     "vitest": "^4.0.10"
   },
   "peerDependencies": {
-    "@rvoh/dream": "^2.0.0"
+    "@rvoh/dream": "^2.6.0"
   }
 }

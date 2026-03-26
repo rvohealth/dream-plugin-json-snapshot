@@ -12,8 +12,8 @@ importers:
         specifier: ^9.19.0
         version: 9.39.1
       '@rvoh/dream':
-        specifier: ^2.0.1
-        version: 2.0.1(@types/node@22.5.4)(@types/pg@8.11.8)(kysely-codegen@0.19.0(kysely@0.28.7)(pg@8.12.0)(typescript@5.5.4))(kysely@0.28.7)(pg@8.12.0)
+        specifier: ^2.6.0
+        version: 2.6.0(@types/node@22.5.4)(@types/pg@8.11.8)(commander@12.1.0)(dotenv@16.4.5)(kysely-codegen@0.19.0(kysely@0.28.7)(pg@8.12.0)(typescript@5.5.4))(kysely@0.28.7)(pg@8.12.0)(pluralize-esm@9.0.5)(typescript@5.5.4)
       '@rvoh/dream-spec-helpers':
         specifier: ^2.0.0
         version: 2.0.0(@types/node@22.5.4)(@types/pg@8.11.8)(pg@8.12.0)
@@ -409,14 +409,18 @@ packages:
       '@types/pg': '*'
       pg: '*'
 
-  '@rvoh/dream@2.0.1':
-    resolution: {integrity: sha512-CBbDNZe26xLI66j7f/JbRTRIBssbe5C5NokMiwscwMqsBu4qJxcuK7yidhxh5HThLpEk+xF6fD7wvLLoX76l5A==}
+  '@rvoh/dream@2.6.0':
+    resolution: {integrity: sha512-qmNcFFNBSdKg23jp+8EpW+PSYGmnc2LbBFjx6HeKuB3otnuXQ4O4iya5KoJCCYipOm5Fm4iSjRz7rSO+ps01nA==}
     peerDependencies:
       '@types/node': '*'
       '@types/pg': '*'
-      kysely: ^0.28.5
+      commander: ^14.0.3
+      dotenv: '*'
+      kysely: ^0.28.14
       kysely-codegen: ~0.19.0
       pg: '*'
+      pluralize-esm: ^9.0.5
+      typescript: ^5.9.3
 
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
@@ -954,8 +958,8 @@ packages:
     resolution: {integrity: sha512-hP3I3kCrDIMuRwAwHltphhDM1r8i55H33GgqjXbrisuJhF4kRhW1dNuxsRklp4bXl8DSdLaNLuiL4A/LWRfxvg==}
     engines: {node: '>= 0.6.0'}
 
-  luxon@3.5.0:
-    resolution: {integrity: sha512-rh+Zjr6DNfUYR3bPwJEnuwDdqMbxZW7LOQfUN4B54+Cl+0o5zaU9RJ6bcidfDtC1cWCZXQ+nvX8bf6bAji37QQ==}
+  luxon@3.7.2:
+    resolution: {integrity: sha512-vtEhXh/gNjI9Yg1u4jX/0YVPMvxzHuGgCm6tC5kZyb08yjGWGnqAjGJvcXbqQR2P3MyMEFnRbpcdFS6PBcLqew==}
     engines: {node: '>=12'}
 
   magic-string@0.30.21:
@@ -1384,8 +1388,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  yoctocolors@2.1.1:
-    resolution: {integrity: sha512-GQHQqAopRhwU8Kt1DDM8NjibDXHC8eoh1erhGAJPEyveY9qqVeXvVikNKrDz69sHowPMorbPUrH/mx8c50eiBQ==}
+  yoctocolors@2.1.2:
+    resolution: {integrity: sha512-CzhO+pFNo8ajLM2d2IW/R93ipy99LWjtwblvC1RsoSUMZgyLbYFr221TnSNT7GjGdYui6P459mw9JH/g/zW2ug==}
     engines: {node: '>=18'}
 
   zod@4.1.12:
@@ -1620,7 +1624,7 @@ snapshots:
       '@types/pg': 8.11.8
       pg: 8.12.0
 
-  '@rvoh/dream@2.0.1(@types/node@22.5.4)(@types/pg@8.11.8)(kysely-codegen@0.19.0(kysely@0.28.7)(pg@8.12.0)(typescript@5.5.4))(kysely@0.28.7)(pg@8.12.0)':
+  '@rvoh/dream@2.6.0(@types/node@22.5.4)(@types/pg@8.11.8)(commander@12.1.0)(dotenv@16.4.5)(kysely-codegen@0.19.0(kysely@0.28.7)(pg@8.12.0)(typescript@5.5.4))(kysely@0.28.7)(pg@8.12.0)(pluralize-esm@9.0.5)(typescript@5.5.4)':
     dependencies:
       '@types/node': 22.5.4
       '@types/pg': 8.11.8
@@ -1629,10 +1633,11 @@ snapshots:
       dotenv: 16.4.5
       kysely: 0.28.7
       kysely-codegen: 0.19.0(kysely@0.28.7)(pg@8.12.0)(typescript@5.5.4)
-      luxon: 3.5.0
+      luxon: 3.7.2
       pg: 8.12.0
       pluralize-esm: 9.0.5
-      yoctocolors: 2.1.1
+      typescript: 5.5.4
+      yoctocolors: 2.1.2
 
   '@standard-schema/spec@1.0.0': {}
 
@@ -2179,7 +2184,7 @@ snapshots:
 
   loglevel@1.9.1: {}
 
-  luxon@3.5.0: {}
+  luxon@3.7.2: {}
 
   magic-string@0.30.21:
     dependencies:
@@ -2552,6 +2557,6 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  yoctocolors@2.1.1: {}
+  yoctocolors@2.1.2: {}
 
   zod@4.1.12: {}
