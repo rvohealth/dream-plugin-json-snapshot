@@ -35,7 +35,7 @@ export default async function (dreamApp: DreamApp) {
       host: process.env.DB_HOST!,
       name: process.env.DB_NAME!,
       port: parseInt(process.env.DB_PORT!),
-      useSsl: process.env.DB_USE_SSL === '1',
+      ssl: process.env.DB_USE_SSL === '1',
     },
     replica: process.env.REPLICA_DB_HOST
       ? {
@@ -44,7 +44,7 @@ export default async function (dreamApp: DreamApp) {
           host: process.env.REPLICA_DB_HOST,
           name: process.env.REPLICA_DB_NAME!,
           port: parseInt(process.env.DB_PORT!),
-          useSsl: process.env.DB_USE_SSL === '1',
+          ssl: process.env.DB_USE_SSL === '1',
         }
       : undefined,
   })
