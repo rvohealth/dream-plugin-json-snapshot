@@ -14,14 +14,43 @@ type AssociationMetadataMap = Record<
 >
 
 /**
- * The `@Snapshotable()` class decorator adds the instance method `takeSnapshot` to the decorated Dream model. When called, `takeSnapshot` builds a simple object of all the database fields for the model. It also traverses the association tree rooted at the model, following `HasMany` and `HasOne` associations, recursively calling `takeSnapshot` on each. This is useful for converting an entire model tree to JSON to, for example, store a user's data in compliance with HIPAA retention requirements.
+ * Mixin that adds `takeSnapshot()` to a Dream model, serializing the model and
+ * its entire association tree into a plain JSON object.
  *
- * Snapshotable automatically skips associations with `required` or `passthrough` `on` clauses.
+ * **Internal use only.** Designed for retention archiving, compliance storage,
+ * and internal audit trails. Not appropriate for user-facing data subject access
+ * requests (GDPR/CCPA). The output reflects the internal association graph, not
+ * what a user would consider "their data."
  *
- * `BelongsTo` associations are intentionally skipped, as are `through` associations, so Snapshotable automatically avoids circuits (which would lead to an infinite loop). To explicitly include a `through` association, decorate it with the `@SnapshotableFollowThrough()` decorator.
+ * **Auto-inclusion is intentional.** For retention use cases, omission is the
+ * real compliance risk. Snapshotable captures everything reachable as the schema
+ * evolves without requiring manual updates.
  *
- * NOTE: Snapshotable builds a single object of the entire content tree, so the in-memory object may become quite large. As such, it may be advisable to leverage `@SnapshotableIgnore` to prevent full traversing the tree so that it can be split into chunks. It is recommended that Snapshotable is only used in a background job (see {@link https://psychicframework.com/docs/plugins/workers/overview}).
+ * **What is traversed:** `HasMany` and `HasOne` associations, recursively.
+ * Soft-deleted records are included (the soft-delete scope is removed).
+ * Uses batched preload queries to avoid N+1 for trees up to 4 levels deep;
+ * falls back to on-demand loading beyond that. Leverages the read replica if configured.
  *
+ * **What is skipped:** `BelongsTo` associations (always — traversal cannot cross
+ * ownership boundaries) and `through` associations (by default — use
+ * `@SnapshotableFollowThrough()` to opt a specific one back in).
+ *
+ * **`@SnapshotableIgnore()`** excludes a column or association from the snapshot.
+ * Associations with a `DreamConst.required` or `DreamConst.passthrough` `and`-clause
+ * **must** be decorated with `@SnapshotableIgnore()` — `takeSnapshot()` throws
+ * `SnapshotableCannotPreloadRequiredOrPassthroughAssociation` if it encounters one
+ * that hasn't been excluded.
+ *
+ * **Data boundary safety:** The `BelongsTo` skip means traversal is bounded by
+ * ownership. Many-to-many join models are safe by default — they have only
+ * `BelongsTo` associations, so the traversal stops there. If you use
+ * `@SnapshotableFollowThrough()` to reach a shared resource through a join model,
+ * that resource's `hasMany` back to the join can pull in join records for other
+ * owners (not their core records — still blocked by `BelongsTo`). Apply
+ * `@SnapshotableIgnore()` to that association if the join model carries sensitive
+ * metadata you don't want in the snapshot.
+ *
+ * @see {@link https://psychicframework.com/docs/plugins/snapshot/overview}
  */
 export default function Snapshotable<T extends SnapshotableConstructor>(Base: T) {
   return class Snapshotable extends Base {
