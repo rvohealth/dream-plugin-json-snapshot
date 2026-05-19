@@ -26,6 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_ENV: test
+      pnpm_config_strict_dep_builds: "false"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -57,6 +58,7 @@ jobs:
 
     env:
       NODE_ENV: test
+      pnpm_config_strict_dep_builds: "false"
       PORT: 7778
       DB_USER: dream
       DB_NAME: dream_core_test
@@ -102,6 +104,7 @@ jobs:
 
     env:
       NODE_ENV: test
+      pnpm_config_strict_dep_builds: "false"
       PORT: 7778
       DB_USER: dream
       DB_NAME: dream_core_test
