@@ -59,7 +59,7 @@ public places: Place[]
 
 `BelongsTo` is always skipped, so traversal cannot cross ownership boundaries — starting from a `User`, you can only reach records that user owns. Many-to-many join models are safe by default: the traversal includes the join records but stops there since join models have only `BelongsTo` associations.
 
-If you use `@SnapshotableFollowThrough()` to reach a shared resource (e.g. `Group`) through a join model, that resource's `hasMany` back to the join model will include join records for *all* owners — not their core records (still blocked by `BelongsTo`), but the join records themselves. Apply `@SnapshotableIgnore()` on that association if the join model carries sensitive metadata you don't want in the snapshot.
+If you use `@SnapshotableFollowThrough()` to reach a shared resource (e.g. `Group`) through a join model, that resource's `hasMany` back to the join model will include join records for _all_ owners — not their core records (still blocked by `BelongsTo`), but the join records themselves. Apply `@SnapshotableIgnore()` on that association if the join model carries sensitive metadata you don't want in the snapshot.
 
 Auto-inclusion is intentional: for retention use cases, omission is the real compliance risk. The tool captures everything reachable as the schema evolves.
 
