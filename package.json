@@ -55,5 +55,8 @@
   },
   "peerDependencies": {
     "@rvoh/dream": "^2.6.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
   }
 }
