@@ -18,6 +18,8 @@ jobs:
   publish:
     name: Publish to npm
     runs-on: ubuntu-latest
+    env:
+      pnpm_config_strict_dep_builds: "false"
     steps:
       - uses: actions/checkout@v4
 

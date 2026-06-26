@@ -1,3 +1,7 @@
+## 2.1.3
+
+- fix release CI: add pnpm_config_strict_dep_builds=false to suppress esbuild ERR_PNPM_IGNORED_BUILDS
+
 ## 2.1.2
 
 - switch to Github action publishing to npmjs.com
