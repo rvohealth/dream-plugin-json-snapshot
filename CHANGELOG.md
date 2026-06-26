@@ -1,3 +1,7 @@
+## 2.2.0
+
+- switch to Github action publishing to npmjs.com
+
 ## 2.1.1
 
 - Rewrite `Snapshotable` TSDoc: fix two factual errors (required/passthrough `and`-clause associations throw rather than silently skip; N+1 is now avoided via batched preloads up to 4 levels deep), add internal-use-only framing, document auto-inclusion rationale, soft-deleted record inclusion, and data boundary safety
