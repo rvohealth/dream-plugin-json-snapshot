@@ -126,6 +126,13 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       const associationMap = dreamClass['associationMetadataMap']() as AssociationMetadataMap
 
+      // At a node beyond the preload depth, none of its associations are hydrated.
+      // `LoadBuilder#execute` hydrates and returns a *clone* rather than mutating the
+      // receiver, so the clone has to be assigned back here; otherwise `dream.loaded(...)`
+      // stays false for every remaining association and this node reloads its entire
+      // subtree once per unloaded association instead of once.
+      let loadedDream = dream
+
       for (const associationName of Object.keys(associationMap)) {
         if (snapshotableIgnoreFields.includes(associationName)) continue
 
@@ -151,16 +158,12 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
 
         switch (associationMetadata.type) {
           case 'HasMany': {
-            let records: Dream[]
-            if (dream.loaded(associationName as any)) {
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-              records = ((dream as any)[associationName] as Dream[]) ?? []
-            } else {
+            if (!loadedDream.loaded(associationName as any)) {
               // Beyond preload depth — load more levels from this node
-              const reloaded = await this._loadSnapshotTree(dream)
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-              records = ((reloaded as any)[associationName] as Dream[]) ?? []
+              loadedDream = await this._loadSnapshotTree(loadedDream)
             }
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            const records = ((loadedDream as any)[associationName] as Dream[]) ?? []
             const hasManyRecords: Record<string, any>[] = []
             for (const record of records) {
               hasManyRecords.push(await this._buildSnapshotFromLoaded(record))
@@ -171,15 +174,12 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
           }
 
           case 'HasOne': {
-            let record: Dream | null
-            if (dream.loaded(associationName as any)) {
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-              record = (dream as any)[associationName] as Dream | null
-            } else {
-              const reloaded = await this._loadSnapshotTree(dream)
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-              record = (reloaded as any)[associationName] as Dream | null
+            if (!loadedDream.loaded(associationName as any)) {
+              // Beyond preload depth — load more levels from this node
+              loadedDream = await this._loadSnapshotTree(loadedDream)
             }
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            const record = (loadedDream as any)[associationName] as Dream | null
             if (record) {
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
               data[associationName] = await this._buildSnapshotFromLoaded(record)

@@ -1,3 +1,7 @@
+## 2.1.4
+
+- fix redundant reloads when snapshotting a node beyond the 4-level preload depth: such a node now issues one batched reload for all of its unloaded associations instead of one reload per association
+
 ## 2.1.3
 
 - upgrade to pnpm@11.9.0; replace pnpm_config_strict_dep_builds CI workaround with pnpm-workspace.yaml (strictDepBuilds: false, esbuild blocked)

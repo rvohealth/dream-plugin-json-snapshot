@@ -380,6 +380,15 @@ export const schema = {
         requiredAndClauses: null,
         passthroughAndClauses: null,
       },
+      unmatchedChild: {
+        type: 'HasOne',
+        foreignKey: 'treeNodeId',
+        foreignKeyTypeColumn: null,
+        tables: ['tree_nodes'],
+        optional: null,
+        requiredAndClauses: null,
+        passthroughAndClauses: null,
+      },
     },
   },
   users: {
