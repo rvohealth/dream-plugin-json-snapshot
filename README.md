@@ -1,5 +1,7 @@
 # dream-plugin-json-snapshot
 
+Requires Node.js 24 or newer. Node.js 26 is the primary development and release runtime.
+
 Serializes a Dream model and its entire association tree into a plain JSON object. Designed for **internal** use cases — retention archiving, compliance storage, internal audit trails. Not appropriate for user-facing data subject access requests (GDPR/CCPA "give me all my data").
 
 ## Installation

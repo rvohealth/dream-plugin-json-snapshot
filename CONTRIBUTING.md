@@ -1,5 +1,7 @@
 ## How to contribute to dream-plugin-json-snapshot
 
+This package supports Node.js 24 and newer. Node.js 26 is the primary development runtime; pull request checks keep Node.js 24 compatibility coverage.
+
 #### **Did you find a bug?**
 
 - **Do not open up a GitHub issue if the bug is a security vulnerability
