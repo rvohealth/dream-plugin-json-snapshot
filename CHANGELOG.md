@@ -1,3 +1,7 @@
+## 2.1.4
+
+- require Node.js 24 or newer and use Node.js 26 as the primary CI and release runtime
+
 ## 2.1.3
 
 - upgrade to pnpm@11.9.0; replace pnpm_config_strict_dep_builds CI workaround with pnpm-workspace.yaml (strictDepBuilds: false, esbuild blocked)
