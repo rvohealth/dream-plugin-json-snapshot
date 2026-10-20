@@ -31,6 +31,14 @@ type AssociationMetadataMap = Record<
  * Uses batched preload queries to avoid N+1 for trees up to 4 levels deep;
  * falls back to on-demand loading beyond that. Leverages the read replica if configured.
  *
+ * **Cycles are cut.** A record is never nested inside itself: if an association
+ * leads back to a record already on the current path from the root (e.g. a
+ * self-referential `siblings` association), that record is omitted at that
+ * point. The same record reached via two independent branches is still
+ * included in both. Cyclic associations therefore terminate, but they can
+ * still produce a lot of redundant nesting; apply `@SnapshotableIgnore()` to
+ * them when that data is not wanted.
+ *
  * **What is skipped:** `BelongsTo` associations (always — traversal cannot cross
  * ownership boundaries) and `through` associations (by default — use
  * `@SnapshotableFollowThrough()` to opt a specific one back in).
@@ -57,7 +65,8 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
     public async takeSnapshot() {
       const dream = this as unknown as Dream
       const loaded = await this._loadSnapshotTree(dream)
-      return await this._buildSnapshotFromLoaded(loaded)
+      // the root is never in its own (empty) ancestor set, so this is never null
+      return (await this._buildSnapshotFromLoaded(loaded, new Set())) as Record<string, any>
     }
 
     /**
@@ -96,10 +105,25 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
      * Builds a snapshot object from already-loaded associations.
      * When an association is not loaded (e.g. tree depth exceeds the
      * preload depth), loads it on-demand and continues.
+     *
+     * `ancestors` holds the identity of every record on the path from the
+     * snapshot root down to `dream`'s parent. If `dream` is already in
+     * `ancestors`, we have followed a cycle (e.g. a `siblings` association
+     * pointing back at the record we came from) and `null` is returned so the
+     * caller omits it, which guarantees the traversal terminates. Records are
+     * only compared against their own ancestor chain, so the same record
+     * reached via two independent branches is still included in both.
      */
-    public async _buildSnapshotFromLoaded(dream: Dream): Promise<Record<string, any>> {
+    public async _buildSnapshotFromLoaded(
+      dream: Dream,
+      ancestors: ReadonlySet<string>
+    ): Promise<Record<string, any> | null> {
       const dreamClass = dream.constructor as typeof Dream
       if (!(dream instanceof Dream)) throw new Error('Cannot call takeSnapshot on a non-Dream')
+
+      const identity = snapshotIdentity(dream)
+      if (ancestors.has(identity)) return null
+      const ancestorsIncludingSelf = new Set(ancestors).add(identity)
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const snapshotableIgnoreFields = ((dreamClass as any)['snapshotableIgnore'] || []) as string[]
@@ -163,7 +187,8 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
             }
             const hasManyRecords: Record<string, any>[] = []
             for (const record of records) {
-              hasManyRecords.push(await this._buildSnapshotFromLoaded(record))
+              const recordSnapshot = await this._buildSnapshotFromLoaded(record, ancestorsIncludingSelf)
+              if (recordSnapshot) hasManyRecords.push(recordSnapshot)
             }
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             data[associationName] = hasManyRecords
@@ -181,8 +206,9 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
               record = (reloaded as any)[associationName] as Dream | null
             }
             if (record) {
+              const recordSnapshot = await this._buildSnapshotFromLoaded(record, ancestorsIncludingSelf)
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-              data[associationName] = await this._buildSnapshotFromLoaded(record)
+              if (recordSnapshot) data[associationName] = recordSnapshot
             }
             break
           }
@@ -192,4 +218,15 @@ export default function Snapshotable<T extends SnapshotableConstructor>(Base: T)
       return data as Record<string, any>
     }
   }
+}
+
+/**
+ * @internal
+ *
+ * Identifies a record within a single snapshot traversal, for cycle detection.
+ * Keyed on table rather than class so STI siblings sharing a table (and
+ * therefore a primary key space) are treated as the same record.
+ */
+function snapshotIdentity(dream: Dream): string {
+  return `${dream.table}:${String(dream.primaryKeyValue())}`
 }

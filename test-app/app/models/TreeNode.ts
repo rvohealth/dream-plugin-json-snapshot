@@ -21,4 +21,13 @@ export default class TreeNode extends Snapshotable(ApplicationModel) {
 
   @deco.HasMany('TreeNode', { on: 'treeNodeId' })
   public children: TreeNode[]
+
+  // Other nodes sharing this node's parent. Each sibling's `siblings`
+  // association points back at this node, forming a cycle.
+  @deco.HasMany('TreeNode', {
+    on: 'treeNodeId',
+    primaryKeyOverride: 'treeNodeId',
+    selfAndNot: { id: 'id' },
+  })
+  public siblings: TreeNode[]
 }
