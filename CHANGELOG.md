@@ -1,3 +1,7 @@
+## 2.1.5
+
+- fix infinite loop in `takeSnapshot()` when an association forms a cycle (e.g. a self-referential `siblings` HasMany); records already on the current ancestor path are now omitted instead of re-traversed
+
 ## 2.1.4
 
 - require Node.js 24 or newer and use Node.js 26 as the primary CI and release runtime
